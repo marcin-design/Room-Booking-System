@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Title of the Page {% endblock %}</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/Dodac link">List of all Exclusive Rooms</a></li>
+            <li><a href="/Dodac link">Adding Rooms</a></li>
+        </ul>
+    </nav>
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+    <footer>
+        <p>Author of the project: Marcin Krysiak</p>
+    </footer>
+</body>
+</html>
