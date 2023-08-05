@@ -1,0 +1,14 @@
+{% extends 'base_html.html' %}
+{% block title %}List of Exclusive Rooms{% endblock %}
+{% block content %}
+<h1>Add more Rooms</h1>
+{% if rooms %}
+    <ul>
+        {% for room in rooms %}
+            <li><a href="{% url 'conf_app:list_of_rooms' %}">List of all Exclusive Rooms</a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Sorry, there are no available Rooms</p>
+{% endif %}
+{% endblock %}

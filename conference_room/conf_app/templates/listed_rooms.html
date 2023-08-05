@@ -1,0 +1,14 @@
+<html>
+    <body>
+        <h1>List of Exclusive Rooms</h1>
+        <ul>
+            {% if rooms %}
+                {% for room in rooms %}
+                    <li><a href="/room/search/{{ room.id }}/">{{ room.name }}</a></li>
+                {% endfor %}
+            {% else %}
+                <p>Sorry, there are no available Rooms</p>
+            {% endif %}
+        </ul>
+    </body>
+</html>
