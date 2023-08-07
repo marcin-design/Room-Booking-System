@@ -9,5 +9,7 @@ urlpatterns = [
     path('room/search/<int:room_id>/', conf_views.searching_by_id),
     path('room/new/added/', conf_views.AfterAddingRoomView.as_view()),
     path('room/new/', conf_views.AddingRooms.as_view()),
-    path('room/delete/<int:room_id>/', conf_views.DeleteRoomView.as_view())
+    path('room/delete/<int:room_id>/', conf_views.DeleteRoomView.as_view()),
+    path('room/edit/<int:room_id>/', conf_views.EditingRooms.as_view()),
+    path('room/edit/edited/', conf_views.EditedView.as_view(), name='edited'),
 ]

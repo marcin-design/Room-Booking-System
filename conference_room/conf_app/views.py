@@ -14,6 +14,7 @@ class AfterAddingRoomView(View):
     def get(self, request, *args, **kwargs):
         return TemplateResponse(request, 'after_adding_room.html', {})
 
+
 class AddingRooms(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'add_room.html')
@@ -30,7 +31,7 @@ class AddingRooms(View):
         if Room.objects.filter(name=name).first():
             return render(request, 'room_already_exists.html')
         Room.objects.create(name=name, capacity=capacity, projector=projector)
-        return redirect("added/")
+        return redirect("AfterAddingRoomView")
 
 def list_of_rooms(request):
     rooms = Room.objects.all()
@@ -50,4 +51,30 @@ class DeleteRoomView(View):
         #Add function name to redirect to needed view - list of rooms
         return redirect('list_of_rooms')
 
+class EditedView(View):
+    def get(self, request,  *args, **kwargs):
+        return TemplateResponse(request, 'after_editing.html', {})
 
+class EditingRooms(View):
+    def get(self, request, room_id):
+        room = Room.objects.get(pk=room_id)
+        return render(request, 'edit_room.html', {'room': room})
+
+    def post(self, request, room_id, *args, **kwargs):
+        room = Room.objects.get(pk=room_id)
+        name = request.POST.get("name")
+        capacity = request.POST.get("capacity", 0)
+        capacity = int(capacity) if capacity else 0
+        projector = request.POST.get("myCheckbox") == "on"
+        if not name:
+            return render(request, 'no_name.html')
+        if capacity <= 0:
+            return render(request, 'no_capacity.html')
+        existing_room = Room.objects.filter(name=name).exclude(pk=room_id).first()
+        if existing_room:
+            return render(request, 'room_already_exists.html')
+        room.name = name
+        room.capacity = capacity
+        room.projector = projector
+        room.save()
+        return redirect('edited')
