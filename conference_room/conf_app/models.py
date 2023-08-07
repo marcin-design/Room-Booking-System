@@ -6,5 +6,10 @@ class Room(models.Model):
     projector = models.BooleanField()
     availability = models.BooleanField(default=True)
 
+class Book(models.Model):
+    book_date = models.DateField()
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    comment = models.TextField(blank=True)
 
-
+    class Meta:
+        unique_together = ('book_date', 'room')
