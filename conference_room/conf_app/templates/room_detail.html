@@ -1,9 +1,9 @@
-{% extends 'base_html.html' %}
-{% block title %}Room Details{% endblock %}
-{% block content %}
-    <h1>Room Details</h1>
-    <p>Name: {{ rooms.name }}</p>
-    <p>Capacity: {{ rooms.capacity }}</p>
-    <p>Projector available: {% if rooms.projector %}Yes{% else %}No{% endif %}</p>
-    <p>Availability: {% if rooms.availability %}Yes{% else %}No{% endif %}</p>
-{% endblock %}
+<html>
+    <body>
+        <h1>Room Details</h1>
+            <p>Name: {{ rooms.name }}</p>
+            <p>Capacity: {{ rooms.capacity }}</p>
+            <p>Projector available: {% if rooms.projector %}Yes{% else %}No{% endif %}</p>
+            <p>Availability: {% if rooms.availability %}Yes{% else %}No{% endif %}</p>
+    </body>
+</html>

@@ -1,14 +1,30 @@
+<!DOCTYPE html>
 <html>
-    <body>
-        <h1>List of Exclusive Rooms</h1>
-        <ul>
-            {% if rooms %}
-                {% for room in rooms %}
-                    <li><a href="/room/search/{{ room.id }}/">{{ room.name }}</a></li>
-                {% endfor %}
-            {% else %}
-                <p>Sorry, there are no available Rooms</p>
-            {% endif %}
-        </ul>
-    </body>
+<head>
+    <title>List of Exclusive Rooms</title>
+</head>
+<body>
+    <h1>List of Exclusive Rooms</h1>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Capacity</th>
+            <th>Projector</th>
+        </tr>
+        {% for room in rooms %}
+            <tr>
+                <td><a href="/room/search/{{ room.id }}/">{{ room.name }}</a></td>
+                <td>{{ room.capacity }}</td>
+                <td>{% if room.projector %}Tak{% else %}Nie{% endif %}</td>
+                <td><a href="/room/edit/{{ room.id }}/">Edit</a></td>
+                <td><a href="/room/delete/{{ room.id }}/">Delete</a></td>
+                <td><a href="/room/reserve/{{ room.id }}/">Book</a></td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="6">Sorry, there are no available Rooms</td>
+            </tr>
+        {% endfor %}
+    </table>
+</body>
 </html>
