@@ -43,7 +43,11 @@ def searching_by_id(request, room_id):
     return render(request, 'room_detail.html', {'rooms': rooms})
 
 class DeleteRoomView(View):
-    def get(self, request, *args, **kwargs):
-        return render(request, 'listed_rooms.html')
+    def get(self, request, room_id):
+        #Download the room based on the given id or return 404 if it doesn't exist
+        delete_room = get_object_or_404(Room, id=room_id)
+        delete_room.delete()
+        #Add function name to redirect to needed view - list of rooms
+        return redirect('list_of_rooms')
 
 

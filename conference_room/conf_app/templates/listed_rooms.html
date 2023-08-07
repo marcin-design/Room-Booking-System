@@ -18,7 +18,7 @@
                 <td>{% if room.projector %}Tak{% else %}Nie{% endif %}</td>
                 <td><a href="/room/edit/{{ room.id }}/">Edit</a></td>
                 <td><a href="/room/delete/{{ room.id }}/">Delete</a></td>
-                <td><a href="/room/reserve/{{ room.id }}/">Book</a></td>
+                <td><a href="/room/book/{{ room.id }}/">Book</a></td>
             </tr>
         {% empty %}
             <tr>
