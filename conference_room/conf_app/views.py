@@ -4,7 +4,8 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.views import View
-from .models import Room
+from .models import Room, Book
+from datetime import date, datetime
 
 class DefaultPage(View):
     def get(self, request, *args, **kwargs):
@@ -78,3 +79,47 @@ class EditingRooms(View):
         room.projector = projector
         room.save()
         return redirect('edited')
+
+class BookRoomView(View):
+    def get(self, request, room_id):
+        room = Room.objects.get(pk=room_id)
+        return render(request, 'book.html', {'room': room})
+
+    def post(self, request, room_id, *args, **kwargs):
+        room = Room.objects.get(pk=room_id)
+        comment = request.POST.get("comment")
+        book_date = request.POST.get("book_date")
+
+
+        if Book.objects.filter(room=room, book_date=book_date):
+            return render(request, "already_booked.html")
+        if book_date < str(datetime.now().date()):
+            return render(request, "incorrect_book_date.html")
+
+        Book.objects.create(room=room, book_date=book_date, comment=comment)
+        return redirect("list_of_rooms")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

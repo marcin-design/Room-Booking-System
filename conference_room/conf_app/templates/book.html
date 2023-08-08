@@ -1,0 +1,15 @@
+<html lang="en">
+    <body>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <h1>Book a Room</h1>
+            <label>Comment:</label>
+                <input type="text" name="comment">
+            <br>
+            <label>Chose a date:</label>
+                <input type="date" id="book_date" name="book_date">
+            <br>
+                <input type="submit" name="Submit">
+        </form>
+    </body>
+</html>

@@ -12,4 +12,5 @@ urlpatterns = [
     path('room/delete/<int:room_id>/', conf_views.DeleteRoomView.as_view()),
     path('room/edit/<int:room_id>/', conf_views.EditingRooms.as_view()),
     path('room/edit/edited/', conf_views.EditedView.as_view(), name='edited'),
+    path('room/book/<int:room_id>/', conf_views.BookRoomView.as_view()),
 ]
