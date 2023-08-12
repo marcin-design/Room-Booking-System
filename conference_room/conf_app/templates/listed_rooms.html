@@ -1,9 +1,8 @@
-<html lang="en">
-<head>
-    <title>List of Exclusive Rooms</title>
-</head>
-<body>
-    <h1>List of Exclusive Rooms</h1>
+{% extends "base_html.html" %}
+{% block title %}
+    List of Exclusive Rooms
+{% endblock %}
+{% block content %}
     <table>
         <tr>
             <th>Name</th>
@@ -25,5 +24,4 @@
             </tr>
         {% endfor %}
     </table>
-</body>
-</html>
+{% endblock %}
