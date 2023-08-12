@@ -88,20 +88,25 @@ class BookRoomView(View):
     def post(self, request, room_id, *args, **kwargs):
         room = Room.objects.get(pk=room_id)
         comment = request.POST.get("comment")
-        book_date = request.POST.get("book_date")
-
+        book_date_str = request.POST.get("book_date")
+        book_date = datetime.strptime(book_date_str, '%Y-%m-%d').date()
 
         if Book.objects.filter(room=room, book_date=book_date):
             return render(request, "already_booked.html")
-        if book_date < str(datetime.now().date()):
+        if book_date < date.today():
             return render(request, "incorrect_book_date.html")
 
         Book.objects.create(room=room, book_date=book_date, comment=comment)
         return redirect("list_of_rooms")
 
-
-
-
+class RoomDetailsView(View):
+    def get(self, request, room_id):
+        room = get_object_or_404(Room, pk=room_id)
+        future_bookings = room.book_set.filter(book_date__gt=date.today()).order_by('book_date')
+        availability = 'No' if future_bookings.exists() else 'Yes'
+        return render(request, 'room_detail.html',
+                      {'rooms': room, 'availability': availability,
+                       'future_bookings': future_bookings})
 
 
 

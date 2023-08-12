@@ -1,9 +1,29 @@
 <html>
-    <body>
-        <h1>Room Details</h1>
-            <p>Name: {{ rooms.name }}</p>
-            <p>Capacity: {{ rooms.capacity }}</p>
-            <p>Projector available: {% if rooms.projector %}Yes{% else %}No{% endif %}</p>
-            <p>Availability: {% if rooms.availability %}Yes{% else %}No{% endif %}</p>
-    </body>
+<head>
+    <title>Room Details</title>
+</head>
+<body>
+    <h1>Room Details</h1>
+    <p>Name: {{ rooms.name }}</p>
+    <p>Capacity: {{ rooms.capacity }}</p>
+    <p>Projector available: {% if rooms.projector %}Yes{% else %}No{% endif %}</p>
+    <p>Availability: {{ availability }}</p>
+    <h2>Future Bookings:</h2>
+    <ul>
+        {% for booking in future_bookings %}
+            <li>
+                Date: {{ booking.book_date }}<br>
+                Comment: {{ booking.comment }}<br>
+            </li>
+        {% empty %}
+            <li>No future bookings.</li>
+        {% endfor %}
+    </ul>
+    <h2>Actions:</h2>
+    <ul>
+        <li><a href="/room/edit/{{ rooms.id }}/">Edit Room</a></li>
+        <li><a href="/room/delete/{{ rooms.id }}/">Delete Room</a></li>
+        <li><a href="/room/book/{{ rooms.id }}/">Book Room</a></li>
+    </ul>
+</body>
 </html>
