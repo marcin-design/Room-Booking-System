@@ -54,6 +54,17 @@
             <li><a href="/room/list/">List of all Exclusive Rooms</a></li>
             <li><a href="/room/new/">Add Room</a></li>
         </ul>
+        <form action="{% url 'query' %}" method="GET">
+    <input type="text" name="room_name" placeholder="Search by name">
+    <input type="number" name="capacity" placeholder="Search by capacity">
+    <label for="projector">Projector:</label>
+    <select name="projector">
+        <option value="">Any</option>
+        <option value="True">With Projector</option>
+        <option value="False">Without Projector</option>
+    </select>
+    <button type="submit">Search</button>
+        </form>
     </nav>
     <div class="content">
         {% block content %}{% endblock %}

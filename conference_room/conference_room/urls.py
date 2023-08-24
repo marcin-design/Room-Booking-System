@@ -13,4 +13,5 @@ urlpatterns = [
     path('room/edit/<int:room_id>/', conf_views.EditingRooms.as_view()),
     path('room/edit/edited/', conf_views.EditedView.as_view(), name='edited'),
     path('room/book/<int:room_id>/', conf_views.BookRoomView.as_view()),
+    path('room/fun-search/', conf_views.search_rooms, name='query'),
 ]

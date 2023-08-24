@@ -1,0 +1,18 @@
+{% extends 'base_html.html' %}
+{% block title %}Room Search Results{% endblock %}
+{% block content %}
+<h2>Search Results</h2>
+{% if rooms %}
+    <ul>
+        {% for room in rooms %}
+            <li>
+                <h3>{{ room.name }}</h3>
+                <p>Capacity: {{ room.capacity }}</p>
+                <p>Projector: {% if room.projector %}Yes{% else %}No{% endif %}</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No rooms match your search criteria.</p>
+{% endif %}
+{% endblock %}

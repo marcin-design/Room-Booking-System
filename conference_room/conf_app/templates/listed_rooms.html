@@ -1,29 +1,29 @@
 {% extends "base_html.html" %}
 {% block content %}
-    <table>
+    <table style="border-collapse: collapse; width: 100%; border: 1px solid #ccc;">
         <tr>
-            <th>Name</th>
-            <th>Capacity</th>
-            <th>Projector</th>
-            <th>Availability</th>
+            <th style="border: 1px solid #ccc; padding: 8px;">Name</th>
+            <th style="border: 1px solid #ccc; padding: 8px;">Capacity</th>
+            <th style="border: 1px solid #ccc; padding: 8px;">Projector</th>
+            <th style="border: 1px solid #ccc; padding: 8px;">Availability</th>
+            <th style="border: 1px solid #ccc; padding: 8px;">Actions</th>
         </tr>
         {% for room in rooms %}
             <tr>
-                <td><a href="/room/search/{{ room.id }}/">{{ room.name }}</a></td>
-                <td>{{ room.capacity }}</td>
-                <td>{% if room.projector %}Yes{% else %}No{% endif %}</td>
-                 <td>{% if room.availability %}Yes{% else %}No{% endif %}</td>
-                <td><a href="/room/edit/{{ room.id }}/">Edit</a></td>
-                <td><a href="/room/delete/{{ room.id }}/">Delete</a></td>
-                <td><a href="/room/book/{{ room.id }}/">Book</a></td>
+                <td style="border: 1px solid #ccc; padding: 8px;"><a href="/room/search/{{ room.id }}/">{{ room.name }}</a></td>
+                <td style="border: 1px solid #ccc; padding: 8px;">{{ room.capacity }}</td>
+                <td style="border: 1px solid #ccc; padding: 8px;">{% if room.projector %}Yes{% else %}No{% endif %}</td>
+                <td style="border: 1px solid #ccc; padding: 8px;">{% if room.availability %}Yes{% else %}No{% endif %}</td>
+                <td style="border: 1px solid #ccc; padding: 8px;">
+                    <a href="/room/edit/{{ room.id }}/">Edit</a> |
+                    <a href="/room/delete/{{ room.id }}/">Delete</a> |
+                    <a href="/room/book/{{ room.id }}/">Book</a>
+                </td>
             </tr>
         {% empty %}
             <tr>
-                <td colspan="6">Sorry, there are no available Rooms</td>
+                <td colspan="5" style="border: 1px solid #ccc; padding: 8px;">Sorry, there are no available Rooms</td>
             </tr>
         {% endfor %}
     </table>
 {% endblock %}
-
-
-

@@ -7,15 +7,18 @@ from django.views import View
 from .models import Room, Book
 from datetime import date, datetime
 from django.utils import timezone
+from django import forms
+from django.db.models import Q
+from django.views.generic import TemplateView
 
-class DefaultPage(View):
+
+class DefaultPage(TemplateView):
     def get(self, request, *args, **kwargs):
         return TemplateResponse(request, 'base_html.html', context={})
 
 class AfterAddingRoomView(View):
     def get(self, request, *args, **kwargs):
         return TemplateResponse(request, 'after_adding_room.html', {})
-
 
 class AddingRooms(View):
     def get(self, request, *args, **kwargs):
@@ -35,7 +38,6 @@ class AddingRooms(View):
         Room.objects.create(name=name, capacity=capacity, projector=projector)
         return redirect("adding_room")
 
-
 def list_of_rooms(request):
     current_date = datetime.now().date()
     rooms = Room.objects.all()
@@ -43,7 +45,6 @@ def list_of_rooms(request):
         todays_bookings = room.book_set.filter(book_date=current_date)
         room.availability = not todays_bookings.exists()
     return render(request, 'listed_rooms.html', {'rooms': rooms, 'current_date': current_date})
-
 
 class DeleteRoomView(View):
     def get(self, request, room_id):
@@ -101,9 +102,6 @@ class BookRoomView(View):
         Book.objects.create(room=room, book_date=book_date, comment=comment)
         return redirect("list_of_rooms")
 
-
-from django.utils import timezone
-
 class RoomDetailsView(View):
     def get(self, request, room_id):
         room = get_object_or_404(Room, pk=room_id)
@@ -112,22 +110,20 @@ class RoomDetailsView(View):
         return render(request, 'room_detail.html',
                       {'room': room, 'future_bookings': future_bookings})
 
+def search_rooms(request):
+    query_name = request.GET.get('room_name')
+    query_capacity = request.GET.get('capacity')
+    query_projector = request.GET.get('projector')
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    rooms = Room.objects.all()
+    if query_name:
+        rooms = rooms.filter(name__icontains=query_name)
+    if query_capacity:
+        rooms = rooms.filter(capacity=query_capacity)
+    if query_projector:
+        if query_projector == 'True':
+            rooms = rooms.filter(projector=True)
+        elif query_projector == 'False':
+            rooms = rooms.filter(projector=False)
+    return render(request, 'search_results.html', {'rooms': rooms})
 
