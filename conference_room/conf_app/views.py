@@ -32,17 +32,15 @@ class AddingRooms(View):
         if Room.objects.filter(name=name).first():
             return render(request, 'room_already_exists.html')
         Room.objects.create(name=name, capacity=capacity, projector=projector)
-        return redirect("AfterAddingRoomView")
+        return redirect("adding_room")
 
 def list_of_rooms(request):
     rooms = Room.objects.all()
-    if not rooms:
-        message = ""
-    return render(request, 'listed_rooms.html', {'rooms': rooms})
+    for room in rooms:
+        future_bookings = room.book_set.filter(book_date__gt=date.today()).exists()
+        room.availability = not future_bookings
 
-def searching_by_id(request, room_id):
-    rooms = get_object_or_404(Room, id=room_id)
-    return render(request, 'room_detail.html', {'rooms': rooms})
+    return render(request, 'listed_rooms.html', {'rooms': rooms})
 
 class DeleteRoomView(View):
     def get(self, request, room_id):
@@ -97,6 +95,8 @@ class BookRoomView(View):
             return render(request, "incorrect_book_date.html")
 
         Book.objects.create(room=room, book_date=book_date, comment=comment)
+        future_bookings = room.book_set.filter(book_date__gt=date.today()).order_by('book_date')
+        availability = 'No' if future_bookings.exists() else 'Yes'
         return redirect("list_of_rooms")
 
 class RoomDetailsView(View):
@@ -105,9 +105,8 @@ class RoomDetailsView(View):
         future_bookings = room.book_set.filter(book_date__gt=date.today()).order_by('book_date')
         availability = 'No' if future_bookings.exists() else 'Yes'
         return render(request, 'room_detail.html',
-                      {'rooms': room, 'availability': availability,
+                      {'room': room, 'availability': availability,
                        'future_bookings': future_bookings})
-
 
 
 
