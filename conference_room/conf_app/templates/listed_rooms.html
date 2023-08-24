@@ -12,7 +12,7 @@
                 <td><a href="/room/search/{{ room.id }}/">{{ room.name }}</a></td>
                 <td>{{ room.capacity }}</td>
                 <td>{% if room.projector %}Yes{% else %}No{% endif %}</td>
-                <td>{% if room.availability %}Yes{% else %}No{% endif %}</td>
+                 <td>{% if room.availability %}Yes{% else %}No{% endif %}</td>
                 <td><a href="/room/edit/{{ room.id }}/">Edit</a></td>
                 <td><a href="/room/delete/{{ room.id }}/">Delete</a></td>
                 <td><a href="/room/book/{{ room.id }}/">Book</a></td>
@@ -24,3 +24,6 @@
         {% endfor %}
     </table>
 {% endblock %}
+
+
+

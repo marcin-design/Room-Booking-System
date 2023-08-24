@@ -9,7 +9,6 @@
     <p>Name: {{ room.name }}</p>
     <p>Capacity: {{ room.capacity }}</p>
     <p>Projector available: {% if room.projector %}Yes{% else %}No{% endif %}</p>
-    <p>Availability: {% if availability == 'Yes' %}Available{% else %}Not Available{% endif %}</p>
     <h1>Future Bookings:</h1>
     <ul>
         {% for booking in future_bookings.all %}

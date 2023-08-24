@@ -11,6 +11,18 @@
                 <input type="date" id="book_date" name="book_date">
             <br>
                 <input type="submit" name="Submit">
+            <br>
+            <h1>Future Bookings:</h1>
+                <ul>
+                    {% for booking in future_bookings.all %}
+                        <li>
+                            Date: {{ booking.book_date }}<br>
+                            Comment: {{ booking.comment }}<br>
+                        </li>
+                    {% empty %}
+                        <li>No future bookings.</li>
+                    {% endfor %}
+                </ul>
         </form>
     </body>
 {% endblock %}

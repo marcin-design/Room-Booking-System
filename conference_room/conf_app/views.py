@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.views import View
 from .models import Room, Book
 from datetime import date, datetime
+from django.utils import timezone
 
 class DefaultPage(View):
     def get(self, request, *args, **kwargs):
@@ -34,13 +35,15 @@ class AddingRooms(View):
         Room.objects.create(name=name, capacity=capacity, projector=projector)
         return redirect("adding_room")
 
+
 def list_of_rooms(request):
+    current_date = datetime.now().date()
     rooms = Room.objects.all()
     for room in rooms:
-        future_bookings = room.book_set.filter(book_date__gt=date.today()).exists()
-        room.availability = not future_bookings
+        todays_bookings = room.book_set.filter(book_date=current_date)
+        room.availability = not todays_bookings.exists()
+    return render(request, 'listed_rooms.html', {'rooms': rooms, 'current_date': current_date})
 
-    return render(request, 'listed_rooms.html', {'rooms': rooms})
 
 class DeleteRoomView(View):
     def get(self, request, room_id):
@@ -81,7 +84,8 @@ class EditingRooms(View):
 class BookRoomView(View):
     def get(self, request, room_id):
         room = Room.objects.get(pk=room_id)
-        return render(request, 'book.html', {'room': room})
+        future_bookings = room.book_set.filter(book_date__gte=date.today()).order_by('book_date')
+        return render(request, 'book.html', {'room': room, 'future_bookings': future_bookings})
 
     def post(self, request, room_id, *args, **kwargs):
         room = Room.objects.get(pk=room_id)
@@ -95,14 +99,14 @@ class BookRoomView(View):
             return render(request, "incorrect_book_date.html")
 
         Book.objects.create(room=room, book_date=book_date, comment=comment)
-        future_bookings = room.book_set.filter(book_date__gt=date.today()).order_by('book_date')
-        availability = 'No' if future_bookings.exists() else 'Yes'
         return redirect("list_of_rooms")
+
 
 class RoomDetailsView(View):
     def get(self, request, room_id):
         room = get_object_or_404(Room, pk=room_id)
-        future_bookings = room.book_set.filter(book_date__gt=date.today()).order_by('book_date')
+        today = timezone.now().date()
+        future_bookings = room.book_set.filter(book_date=today).order_by('book_date')
         availability = 'No' if future_bookings.exists() else 'Yes'
         return render(request, 'room_detail.html',
                       {'room': room, 'availability': availability,
