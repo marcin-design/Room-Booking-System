@@ -102,15 +102,15 @@ class BookRoomView(View):
         return redirect("list_of_rooms")
 
 
+from django.utils import timezone
+
 class RoomDetailsView(View):
     def get(self, request, room_id):
         room = get_object_or_404(Room, pk=room_id)
-        today = timezone.now().date()
-        future_bookings = room.book_set.filter(book_date=today).order_by('book_date')
-        availability = 'No' if future_bookings.exists() else 'Yes'
+        now = timezone.now()
+        future_bookings = room.book_set.filter(book_date__gte=now.date()).order_by('book_date')
         return render(request, 'room_detail.html',
-                      {'room': room, 'availability': availability,
-                       'future_bookings': future_bookings})
+                      {'room': room, 'future_bookings': future_bookings})
 
 
 
