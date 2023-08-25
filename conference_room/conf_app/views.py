@@ -1,24 +1,24 @@
-from django.shortcuts import render, get_object_or_404
+from datetime import date, datetime
+from django import forms
+from django.db.models import Q
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template.response import TemplateResponse
-from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.views import View
-from .models import Room, Book
-from datetime import date, datetime
 from django.utils import timezone
-from django import forms
-from django.db.models import Q
 from django.views.generic import TemplateView
-
+from .models import Room, Book
 
 class DefaultPage(TemplateView):
     def get(self, request, *args, **kwargs):
         return TemplateResponse(request, 'base_html.html', context={})
+    #Basic view of the server
 
 class AfterAddingRoomView(View):
     def get(self, request, *args, **kwargs):
         return TemplateResponse(request, 'after_adding_room.html', {})
+    #View after adding new room to database.
 
 class AddingRooms(View):
     def get(self, request, *args, **kwargs):
@@ -37,6 +37,8 @@ class AddingRooms(View):
             return render(request, 'room_already_exists.html')
         Room.objects.create(name=name, capacity=capacity, projector=projector)
         return redirect("adding_room")
+    #View that allowed us to add a new room.
+    # Here are also additional templates in case of incorrect information from the user.
 
 def list_of_rooms(request):
     current_date = datetime.now().date()
@@ -45,23 +47,26 @@ def list_of_rooms(request):
         todays_bookings = room.book_set.filter(book_date=current_date)
         room.availability = not todays_bookings.exists()
     return render(request, 'listed_rooms.html', {'rooms': rooms, 'current_date': current_date})
+    #That's the view that shows us list of available rooms.
 
 class DeleteRoomView(View):
     def get(self, request, room_id):
         #Download the room based on the given id or return 404 if it doesn't exist
         delete_room = get_object_or_404(Room, id=room_id)
         delete_room.delete()
-        #Add function name to redirect to needed view - list of rooms
         return redirect('list_of_rooms')
+        # Add function name to redirect to needed view - list of rooms
 
 class EditedView(View):
     def get(self, request,  *args, **kwargs):
         return TemplateResponse(request, 'after_editing.html', {})
+    #That's a template that shows us the view after confirming changes (editing).
 
 class EditingRooms(View):
     def get(self, request, room_id):
         room = Room.objects.get(pk=room_id)
         return render(request, 'edit_room.html', {'room': room})
+    #That's a basic view by using GET method.
 
     def post(self, request, room_id, *args, **kwargs):
         room = Room.objects.get(pk=room_id)
@@ -81,12 +86,15 @@ class EditingRooms(View):
         room.projector = projector
         room.save()
         return redirect('edited')
+    #There we have a few options that allow us to edit specific room.
 
 class BookRoomView(View):
     def get(self, request, room_id):
         room = Room.objects.get(pk=room_id)
         future_bookings = room.book_set.filter(book_date__gte=date.today()).order_by('book_date')
         return render(request, 'book.html', {'room': room, 'future_bookings': future_bookings})
+    #Here we have the possibility to book specific room.
+    #Additional thing is future bookings view.
 
     def post(self, request, room_id, *args, **kwargs):
         room = Room.objects.get(pk=room_id)
@@ -101,6 +109,7 @@ class BookRoomView(View):
 
         Book.objects.create(room=room, book_date=book_date, comment=comment)
         return redirect("list_of_rooms")
+    #Exception handling
 
 class RoomDetailsView(View):
     def get(self, request, room_id):
@@ -109,6 +118,7 @@ class RoomDetailsView(View):
         future_bookings = room.book_set.filter(book_date__gte=now.date()).order_by('book_date')
         return render(request, 'room_detail.html',
                       {'room': room, 'future_bookings': future_bookings})
+    # The view of the specific room with every detail.
 
 def search_rooms(request):
     query_name = request.GET.get('room_name')
@@ -126,4 +136,4 @@ def search_rooms(request):
         elif query_projector == 'False':
             rooms = rooms.filter(projector=False)
     return render(request, 'search_results.html', {'rooms': rooms})
-
+    #Search function
