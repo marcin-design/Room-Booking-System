@@ -1,10 +1,6 @@
 from datetime import date, datetime
-from django import forms
-from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.response import TemplateResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse
 from django.views import View
 from django.utils import timezone
 from django.views.generic import TemplateView
